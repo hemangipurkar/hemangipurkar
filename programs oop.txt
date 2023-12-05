@@ -1,0 +1,579 @@
+COMPLEX
+#include<iostream>
+using namespace std;
+class complex
+{
+	float x;
+	float y;
+public:
+        complex()
+	{
+		x=0;
+		y=0;
+	}
+		
+	complex operator+(complex);
+	complex operator*(complex);
+	friend istream &operator >>(istream &input,complex &t);
+	
+	friend ostream &operator <<(ostream &output,complex &t);
+	
+	
+};
+
+complex complex::operator+(complex c)
+{
+	complex temp;
+	temp.x=x+c.x;
+	temp.y=y+c.y;
+	return(temp);
+}
+
+
+complex complex::operator*(complex c)
+{
+	complex temp2;
+	temp2.x=(x*c.x)-(y*c.y);
+	temp2.y=(y*c.x)+(x*c.y);
+	return (temp2);
+}
+
+istream &operator >>(istream &input,complex &t)
+	{
+		cout<<"Enter the real part";
+		input>>t.x;
+		cout<<"Enter the imaginary part";
+		input>>t.y;
+	}
+ostream &operator <<(ostream &output,complex &t)
+	{
+			output<<t.x<<"+"<<t.y<<"i\n";
+	}
+int main()
+{
+	complex c1,c2,c3,c4;
+        cout<<"Default constructor value=\n";
+        cout<<c1;
+	cout<<"\nEnter the 1st number\n";
+	cin>>c1;
+	cout<<"\nEnter the 2nd number\n";
+	cin>>c2;
+	c3=c1+c2;
+	c4=c1*c2;
+	cout<<"\nThe first number is ";
+	cout<<c1;
+	cout<<"\nThe second number is ";
+	cout<<c2;
+	cout<<"\nThe addition is ";
+	cout<<c3;
+	cout<<"\nThe multiplication is ";
+	cout<<c4;
+	return 0;
+}
+
+ASGN2
+#include <iostream>
+#include<string.h>
+#include<iomanip>
+
+using namespace std;
+class db
+{
+ int roll;
+ char name[20];
+ char Class[10];
+ char Div[10];
+ char dob[10];
+   char bg[3],contact[10];
+   char phone[10],license[12];
+
+   public:
+   static int stdno;
+   static void count()
+   {
+      cout<<"\nNo. of objects created: "<<stdno;
+   }
+ 
+
+   db()
+   {
+       roll=0;
+       strcpy(name,"Sachin");
+       strcpy(Class,"I");
+       strcpy(Div,"A");
+      strcpy(dob,"11/11/1111");
+      strcpy(bg,"A");
+      strcpy(contact,"city");
+      strcpy(phone,"9000000000");
+      strcpy(license,"A0101010");
+      ++stdno;
+   }
+   db(db *ob)
+   {
+      strcpy(name,ob->name);
+      strcpy(dob,ob->dob);
+      strcpy(Class,ob->Class);
+      strcpy(Div,ob->Div);
+      strcpy(bg,ob->bg);
+      strcpy(contact,ob->contact);
+      strcpy(phone,ob->phone);
+      strcpy(license,ob->license);
+      ++stdno;
+   }
+void getdata()
+   {
+     cout<<"\n\nEnter:name,roll,Class,Div,Dob,bg,contact,phone,license \n\n\n";
+     cin>>name>>roll>>Class>>Div>>dob>>bg>>contact>>phone>>license;
+   }
+   friend void display(db d);
+   ~db()
+   {
+      cout<<"\n\n"<<this->name<<"(Object) is destroyed!";
+   }
+};
+
+void display(db d)
+{
+ cout<<"\n"<<setw(12)<<d.name<<setw(5)<<d.roll<<setw(4)<<d.Class<<setw(3)<<d.Div<<setw(12)<<d.dob<<setw(4)<<d.bg<<setw(12)<<d.contact<<" "<<setw(12)<<d.phone<<" "<<setw(12)<<" "<<d.license;
+}
+int db::stdno;
+
+int main()
+{
+    int n,i;
+    db d1,*ptr[5];
+    cout<<"\nDefault values:";
+    display(d1);
+
+    d1.getdata();
+    display(d1);
+
+    db d2(&d1);
+    cout<<"\n\nUse of copy constructor :\n";
+    display(d2);
+
+
+    cout<<"\nHow many objects u want to create?:";
+    cin>>n;
+    for(i=0;i<n;i++)
+    {
+     ptr[i]=new db();
+      ptr[i]->getdata();
+    }
+    cout<<"\n"<<setw(12)<<"name"<<setw(5)<<"roll"<<setw(4)<<"Class"<<setw(4)<<"Div"<<setw(12)<<"dob"<<setw(4)<<"bg"<<setw(12)<<"contact"<<setw(12)<<"phone"<<setw(12)<<"license";
+   for(i=0;i<n;i++)
+     display(*ptr[i]);
+   db::count();
+   for(i=0;i<n;i++)
+   {
+     delete(ptr[i]);
+   }
+   cout<<"\nObjects deleted!" ;
+   return 0;
+}
+
+INHERITANCE
+#include <iostream>
+#include <string>
+using namespace std;
+
+class publication                     // base class
+{
+   private:
+   string title;
+   float price;
+   public:
+   void getdata()
+   {
+      cout << "\nEnter Title: "; cin >> title;
+      cout << "Enter price: "; cin >> price;
+   }
+   void putdata() const
+   {
+      cout << "\nTitle: " << title;
+      cout << "\nPrice: " << price;
+   }
+};
+
+class book : private publication      // derived class
+{
+   private:
+   int pages;
+   public:
+   void getdata()
+   {
+      publication::getdata();
+      cout << "Enter number of pages: "; cin >> pages;
+   }
+   void putdata() const
+   {
+      publication::putdata();
+      cout << "\nPages: " << pages;
+   }
+};
+
+class tape : private publication      // derived class
+{
+   private:
+   float time;
+   public:
+   void getdata()
+   {
+      publication::getdata();
+      cout << "Enter playing time: "; cin >> time;
+   }
+   void putdata() const
+   {
+      publication::putdata();
+      cout << "\nPlaying time: " << time;
+   }
+};
+
+int main()
+{
+   book book1;                        // define publications
+   tape tape1;
+   book1.getdata();                   // get data for them
+   tape1.getdata();
+   book1.putdata();                   // display their data
+   tape1.putdata();
+   cout << endl;
+   return 0;
+}
+
+TEMPLATE
+#include<iostream>
+using namespace std;
+int n;
+#define size 10
+template<class T>
+void sel(T A[size])
+{
+ int i,j,min;
+ T temp;
+ for(i=0;i<n-1;i++)
+ {
+ min=i;
+ for(j=i+1;j<n;j++)
+ {
+ if(A[j]<A[min])
+ min=j;
+ }
+ temp=A[i];
+ A[i]=A[min];
+ A[min]=temp;
+ }
+ cout<<"\nSorted array: ";
+ for(i=0;i<n;i++)
+ {
+ cout<<" "<<A[i];
+ }
+}
+int main()
+{
+ int choice;
+ char C[size];
+ int A[size];
+ float B[size];
+
+ int i;
+
+ cout<<"-----------------------";
+ do
+ {
+ cout<<"\n 1. Integer : ";
+ cout<<"\n 2. Float : ";
+ cout<<"\n 3. Exit : "<<endl;
+ cout<<"\n Enter Choice : ";
+ cin>>choice;
+ switch(choice)
+ {
+ case 1:
+ {
+ cout<<"\nEnter Total Number Of Integer Elements:";
+ cin>>n;
+ cout<<"\nEnter Integer Elements:";
+ for(i=0;i<n;i++)
+ {
+ cin>>A[i];
+ }
+ sel(A);
+
+ break;
+ }
+ case 2:
+ {
+ cout<<"\nEnter Total Number Of Float Elements:";
+ cin>>n;
+ cout<<"\nEnter Float Elememts:";
+ for(i=0;i<n;i++)
+ {
+ cin>>B[i];
+ }
+ sel(B);
+
+ break;
+ }
+ case 3:
+ {
+ cout<<"**********Program Exited Successfully**********"<<endl;
+ exit(0);
+ }
+
+
+ default:
+ {
+ cout<<"\n Invalid";
+ }
+ }
+ }
+ while(choice!=4);
+return 0;
+}
+
+FILE HANDLING
+#include <iostream>
+#include <fstream>
+ 
+using namespace std;
+ 
+int main()
+{
+   fstream file; //object of fstream class
+    
+   //opening file "sample.txt" in out(write) mode
+   file.open("sample.txt",ios::out);
+    
+   if(!file)
+   {
+       cout<<"Error in creating file!!!"<<endl;
+       return 0;
+   }
+    
+   cout<<"File created successfully."<<endl;
+   //write text into file
+   file<<"ABCD.";
+   //closing the file
+   file.close();
+    
+   //again open file in read mode
+   file.open("sample.txt",ios::in);
+    
+   if(!file)
+   {
+       cout<<"Error in opening file!!!"<<endl;
+       return 0;
+   }   
+    
+   //read untill end of file is not found.
+   char ch; //to read single character
+   cout<<"File content: ";
+    
+   while(!file.eof())
+   {
+       file>>ch; //read single character from file
+       cout<<ch;
+   }
+    
+   file.close(); //close file
+    
+   return 0;
+}
+STL VECTOR
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+class student
+{
+ public:
+                        int rollno;
+                        string name;
+                        char dob[15];
+           
+                        bool operator==(const student &student1)
+                        {
+                           return(rollno==student1.rollno);
+                        }
+                        bool operator<(const student &student1)
+                       {
+                           return(rollno<student1.rollno);
+                        }
+
+    friend ostream& operator << (ostream &out, const student &);
+
+       friend istream& operator >> (istream &in, student &k);
+};
+
+ostream & operator << (ostream &out, const student &k)         
+        {
+         out<<"\n\t\t"<<k.rollno<<"\t\t"<<k.name<<"\t\t"<<k.dob;
+         return out;
+        }
+
+istream & operator >> (istream &in , student &k)
+            {
+                cout<<"\nEnter Roll No : ";
+                in>>k.rollno;
+                cout<<"\nEnter Name : ";
+                in>>k.name;
+                cout<<"\nEnter DOB  : ";
+                in>>k.dob;
+                return in;
+            }                     
+
+bool myfunc(const student &k, const student &i2)
+            {
+                        return(k.rollno<i2.rollno);
+            }
+
+
+vector<student> read()
+            {
+                        int n;
+                        student k;     
+                        vector<student> j;
+                      cout<< "\nEnter total no. of students : ";
+                        cin>>n;
+                        for(int i=0;i<n;i++)
+                                    {
+                                                cin>>k;
+                                                j.push_back(k);
+                                    }
+                        return j;
+            }
+
+void printfunction(const student &k)
+            {
+                        cout<<k;
+            }
+
+
+void print( const vector<student> &j)
+            {
+            cout<<"\n\t\tROLL NO\t\tNAME\t\tDATE OF BIRTH";
+             for_each(j.begin(),j.end(),printfunction);
+
+            }
+
+
+void insert(vector<student> &j)
+            {
+                        student k;
+                        cin>>k;
+                        j.push_back(k);
+            }
+
+
+void delet(vector<student>&j)
+            {
+                        student k;
+                   cout<<"\nEnter Student Roll No To Delete : ";
+                        cin>>k.rollno;
+                        vector<student>::iterator p;
+                        p=find(j.begin(),j.end(),k);
+                if(p!=j.end())
+                                    j.erase(p);
+                        else
+                                    cout<<"\nNot found ";
+            }
+
+
+void search( vector<student>&j )
+            {
+                        student k;
+                  cout<<"\nEnter Student Roll No To Search  : ";
+                        cin>>k.rollno;
+               cout<<"\n\n\t\tROLL NO\t\tNAME\t\tDATE OF BIRTH";
+                        vector<student>::iterator p;
+                        p=find(j.begin(),j.end(),k);
+                        if(p!=j.end())
+                                    cout<<*p;
+                        else
+                                    cout<<"\nNot found ";
+            }
+
+
+void sort( vector<student> &j)
+            {
+                        sort(j.begin(),j.end(),myfunc);
+
+            }
+
+int main()
+  {
+    vector<student> j;
+    int op;
+    do
+     {
+            cout<<"\n\n\t\t-------<< MENU >>---------";
+            cout<<"\n\t\t1.Create ";
+            cout<<"\n\t\t2.Display ";
+            cout<<"\n\t\t3.Insert  ";
+            cout<<"\n\t\t4.Delete ";
+            cout<<"\n\t\t5.Search ";
+            cout<<"\n\t\t6.Sort";
+            cout<<"\n\t\t7.Quit";
+            cout<<"\n\t\t--------------------------";
+            cout<<"\n\t\tEnter your choice : ";
+            cin >> op;
+            switch(op)
+            {
+             case 1:
+                                     j=read();
+                                     break;
+             case 2:
+                                     print(j);
+                                     break;
+             case 3:
+                                     insert(j);
+                                     break;
+             case 4:
+                                     delet(j);
+                                     break;
+             case 5:
+                                     search(j);
+                                     break;
+             case 6:
+                                     sort(j);
+                         print(j);
+                                     break;
+            }
+     }while(op!=7);
+ }
+
+POPULATION
+#include <iostream>
+#include <map>
+#include <string>
+#include <utility> 
+using namespace std;
+ int main()
+{
+	typedef map<string, int> mapType;
+	mapType populationMap;
+ 
+	populationMap.insert(pair<string, int>("China", 1339));
+	populationMap.insert(pair<string, int>("India", 1187));
+	populationMap.insert(mapType::value_type("US", 310)); 
+	populationMap.insert(mapType::value_type("Indonesia", 234)); 
+	populationMap.insert(make_pair("Brasil", 193)); 
+	populationMap.insert(make_pair("Pakistan", 170)); 
+	mapType::iterator iter = --populationMap.end();
+	populationMap.erase(iter);
+ 	
+	cout << "Size of populationMap: " << populationMap.size() << '\n';
+ 	for (iter = populationMap.begin(); iter != populationMap.end(); ++iter)
+           {
+		cout << iter->first <<": " << iter->second << " million\n";
+	}
+	string country("Indonesia");
+	iter = populationMap.find(country);
+	if( iter != populationMap.end() ) 
+		cout << country <<"'s populations is "<< iter->second << " million\n";
+	else
+		cout << "Key is not in populationMap" << '\n';
+ 	populationMap.clear();
+}
